@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>엔젤스쉐어 바이브코딩 세션 · 참가자 허브</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #16161f;
+      --card: #12121a;
+      --card-hover: #1a1a28;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e8e8ed;
+      --text-dim: #8b8b9e;
+      --accent: #a78bfa;
+      --accent-2: #818cf8;
+      --accent-3: #6366f1;
+    }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .gradient-text {
+      background-image: linear-gradient(135deg, var(--accent), var(--accent-2), var(--accent-3));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-bg {
+      background-image: linear-gradient(135deg, var(--accent), var(--accent-2), var(--accent-3));
+    }
+    .glow::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: var(--accent);
+      opacity: 0.12;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+    .card-soft {
+      background: rgba(167, 139, 250, 0.06);
+      border: 1px solid rgba(167, 139, 250, 0.16);
+      border-radius: 12px;
+    }
+    .prompt-block {
+      background: #0d0d14;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'SF Mono', ui-monospace, 'Menlo', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: #cfd0e0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .btn-primary {
+      background-image: linear-gradient(135deg, var(--accent), var(--accent-2), var(--accent-3));
+      color: white;
+      font-weight: 600;
+      border-radius: 9999px;
+      padding: 12px 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 4px 24px rgba(167, 139, 250, 0.22);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(167, 139, 250, 0.32); }
+    .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-weight: 500;
+      border-radius: 9999px;
+      padding: 12px 24px;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+    .btn-ghost:disabled { opacity: 0.3; cursor: not-allowed; }
+    .step-pill {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text-dim);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .step-pill.active {
+      border-color: transparent;
+      background-image: linear-gradient(135deg, var(--accent), var(--accent-3));
+      color: white;
+    }
+    .step-pill.done {
+      border-color: rgba(167, 139, 250, 0.35);
+      color: var(--accent);
+    }
+    .step-pill:hover { border-color: var(--accent); color: var(--text); }
+    .step-pill.active:hover { border-color: transparent; color: white; }
+    .progress-bar {
+      background: var(--card);
+      height: 4px;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      background-image: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+    .copy-btn {
+      background: rgba(167, 139, 250, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(167, 139, 250, 0.24);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .copy-btn:hover { background: rgba(167, 139, 250, 0.2); border-color: var(--accent); }
+    .copy-btn.copied { background: rgba(74, 222, 128, 0.15); color: #4ade80; border-color: rgba(74, 222, 128, 0.35); }
+    .link-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+      color: var(--text);
+    }
+    .link-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .checklist-item {
+      display: flex;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 8px 32px rgba(167, 139, 250, 0.4);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    .scroll-steps {
+      scrollbar-width: none;
+    }
+    .scroll-steps::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+<!-- 상단 네비 (progress + step pills) -->
+<header class="sticky top-0 z-40 backdrop-blur-xl" style="background: rgba(10,10,15,0.85); border-bottom: 1px solid var(--border);">
+  <div class="mx-auto max-w-5xl px-5 pt-5 pb-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">🥃</span>
+        <span class="font-semibold text-[0.95rem]">엔젤스쉐어 바이브코딩</span>
+      </div>
+      <div class="text-xs" style="color: var(--text-dim);">
+        <span id="nav-step-num"></span> <span class="mx-1">·</span> <span id="nav-step-time"></span>
+      </div>
+    </div>
+    <div class="progress-bar mb-3">
+      <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
+    </div>
+    <div id="step-pills" class="flex gap-2 overflow-x-auto scroll-steps py-1"></div>
+  </div>
+</header>
+
+<!-- 메인 콘텐츠 -->
+<main class="relative mx-auto max-w-3xl px-5 py-10 glow" id="main">
+  <div class="relative z-10" id="step-content"></div>
+
+  <!-- 하단 네비 -->
+  <div class="flex items-center justify-between gap-3 mt-12 pt-6" style="border-top: 1px solid var(--border);">
+    <button id="prev-btn" class="btn-ghost">← 이전</button>
+    <div class="text-xs" style="color: var(--text-dim);" id="step-dots"></div>
+    <button id="next-btn" class="btn-primary">다음 →</button>
+  </div>
+</main>
+
+<div id="toast" class="toast">복사됨</div>
+
+<script>
+// ================================================================
+// 세션 스텝 데이터
+//   - URL이 #todo-* 로 된 항목은 실제 링크로 교체 필요
+//   - 프롬프트 텍스트는 노션 진행 가이드에서 가져옴
+// ================================================================
+const STEPS = [
+  {
+    n: '01',
+    emoji: '✨',
+    title: '훅 데모',
+    time: '10분',
+    blocks: [
+      { type: 'links', items: [
+        { label: '🥃 엔젤스쉐어 샘플 사이트', href: '#todo-hook-demo', badge: '체험' },
+      ]},
+    ],
+  },
+
+  {
+    n: '02',
+    emoji: '🧩',
+    title: 'Code Previewer 설치 + 미시소 가입',
+    time: '5분',
+    blocks: [
+      { type: 'note', body: '크롬 스토어 버전(0.1.2)이 아니라 <strong>로컬 배포판 v0.1.3</strong>을 씁니다.' },
+      { type: 'heading', text: '1. 확장 다운로드 + 로드' },
+      { type: 'links', items: [
+        { label: '🧩 Code Previewer 확장 (v0.1.3)', href: 'https://github.com/orot-ai/notion-code-previewer/raw/main/extension-0.1.3.zip', badge: 'ZIP' },
+        { label: '⚙️ 크롬 확장 관리 페이지', href: 'chrome://extensions', badge: 'chrome://' },
+      ]},
+      { type: 'checklist', items: [
+        'zip 다운로드 후 압축 해제',
+        '크롬 확장 관리 페이지에서 <strong>개발자 모드</strong> 토글 ON',
+        '<strong>"압축 해제된 확장 프로그램을 로드합니다"</strong> 클릭 → 압축 푼 폴더 선택',
+      ]},
+      { type: 'heading', text: '2. 미시소 로그인 / 가입' },
+      { type: 'links', items: [
+        { label: '🔐 미시소 로그인', href: 'https://misiso.com/login', badge: 'Login' },
+      ]},
+    ],
+  },
+
+  {
+    n: '03',
+    emoji: '🤖',
+    title: 'Codex 설치',
+    time: '5분',
+    blocks: [
+      { type: 'links', items: [
+        { label: '🤖 Codex 설치', href: 'https://chatgpt.com/codex', badge: '설치' },
+      ]},
+    ],
+  },
+
+  {
+    n: '04-1',
+    emoji: '📦',
+    title: '자료 세팅',
+    time: '5분',
+    blocks: [
+      { type: 'links', items: [
+        { label: '📊 상품소개.csv', href: '#todo-csv-products', badge: 'CSV' },
+        { label: '⭐ 고객후기.csv', href: '#todo-csv-reviews', badge: 'CSV' },
+        { label: '📝 엔젤스쉐어 기획서 (노션 복제)', href: '#todo-planner-template', badge: '복제' },
+      ]},
+      { type: 'note', body: '<code>@[미시소] 코드 생성 규칙</code>은 Code Previewer 연결 시 자동 복제되는 템플릿에 포함됨.' },
+    ],
+  },
+
+  {
+    n: '04-2',
+    emoji: '🤖',
+    title: 'Codex로 DB 생성',
+    time: '10분',
+    blocks: [
+      { type: 'checklist', items: [
+        '<a href="https://www.notion.so/my-integrations" target="_blank" class="underline" style="color:var(--accent);">notion.so/my-integrations</a>에서 <strong>새 Integration 생성</strong>',
+        'Integration Secret 복사',
+        '부모 빈 페이지에서 ••• → Connections → 방금 만든 Integration 연결',
+      ]},
+      { type: 'prompt', title: 'Codex 프롬프트', code: `이 CSV 2개를 각각 노션 DB로 만들어서 데이터 업로드해줘.
+- CSV 첨부: 상품소개.csv, 고객후기.csv
+- 노션 API 키: (참가자 본인 발급)
+- 부모 페이지 URL: (참가자 본인 빈 페이지)
+DB 이름은 SERVICE SHOWCASE 와 CUSTOMER REVIEW 로 만들어줘.` },
+    ],
+  },
+
+  {
+    n: '04-3',
+    emoji: '🥃',
+    title: '랜딩 코딩',
+    time: '15분',
+    blocks: [
+      { type: 'prompt', title: '코딩 프롬프트', code: `@엔젤스쉐어 기획서 @[미시소] 코드 생성 규칙
+이 기획서대로 프리미엄 위스키 랜딩 페이지를 만들어줘.
+DB 연동은 아래 DB를 사용해:
+- 상품: @SERVICE SHOWCASE
+- 후기: @CUSTOMER REVIEW (열람 + 작성 폼)` },
+    ],
+  },
+
+  {
+    n: '☕',
+    emoji: '☕',
+    title: '쉬는 시간',
+    time: '5분',
+    blocks: [],
+  },
+
+  {
+    n: '05',
+    emoji: '📝',
+    title: '본인 서비스 기획서',
+    time: '10분',
+    blocks: [
+      { type: 'prompt', title: '본인 서비스 기획서 프롬프트 (노션 AI)', code: `@[미시소] 코드 생성 규칙
+
+나는 지금 내가 만들고 싶은 웹서비스의 기획서를 작성하려고 해.
+**앞에 멘션한 코드 생성 규칙 안에서 구현 가능한 범위로** 기획을 도와줘 (Code Previewer Next.js 모드, fetch('/api/notion/...') 패턴, Fallback 필수 등).
+아래 4개 항목에 대한 답을 네가 한 번에 하나씩 물어봐줘.
+내가 답하면 다음 질문으로 넘어가고, 4개 답이 다 모이면 마지막에 기획서 1장으로 정리해서 노션 페이지로 출력해줘.
+
+1. 서비스 한 줄 설명 — "누구를 위한 / 무엇을 / 어떻게 해주는" 서비스인가?
+2. 페이지 구조 — 필요한 페이지 + 각 페이지 핵심 섹션 (예: 홈=히어로+카드그리드 / 후기=리스트+작성폼)
+3. 노션 DB 연동 — 어떤 DB의 어떤 컬럼을 웹에 보여줄지 (가상 스키마도 OK)
+4. 폼 필수 필드 — 후기 / 문의 폼에 어떤 필드가 필요한지
+
+규칙:
+- 질문은 반드시 한 번에 하나씩.
+- 내 답이 모호하면 예시 2~3개 주고 고르게 해줘.
+- 마지막엔 4개 답을 기반으로 기획서를 섹션별로 정리해서 노션 페이지 형식으로 출력.` },
+    ],
+  },
+
+  {
+    n: '06',
+    emoji: '💻',
+    title: '본인 서비스 코딩',
+    time: '20분',
+    blocks: [
+      { type: 'prompt', title: '코딩 프롬프트', code: `@내 기획서 @[미시소] 코드 생성 규칙
+이 기획서대로 웹사이트를 만들어줘.
+DB 연동이 필요한 섹션은 기획서에 정의한 스키마대로 구성해줘.` },
+    ],
+  },
+
+  {
+    n: '07',
+    emoji: '🚀',
+    title: '배포',
+    time: '10분',
+    blocks: [
+      { type: 'checklist', items: [
+        'Code Previewer 사이드 패널에서 <strong>"배포"</strong> 버튼 클릭',
+        'GitHub 로그인 / 권한 승인 팝업 → 승인',
+        '배포 URL 확인',
+      ]},
+    ],
+  },
+
+  {
+    n: '08',
+    emoji: '🎓',
+    title: '심화 — Tasklens',
+    time: '10분',
+    blocks: [
+      { type: 'text', body: '로그인 · 권한 분기 · 슬랙 웹훅 같은 서버 필요 기능은 프리뷰로 불가. 완성본 복제해서 직접 돌리는 경로만.' },
+      { type: 'links', items: [
+        { label: '📘 Tasklens 완성본 노션 페이지', href: '#todo-tasklens-page', badge: '복제' },
+        { label: '📄 Tasklens PRD', href: '#todo-tasklens-prd', badge: '스펙' },
+      ]},
+      { type: 'heading', text: '심화 3단계' },
+      { type: 'checklist', items: [
+        'Tasklens 완성본 노션 페이지 복제',
+        'Code Previewer에서 <strong>ZIP 다운로드</strong> → <code>.env.local</code>에 노션 토큰·Google OAuth 키 입력 → <code>npm install && npm run dev</code>',
+        'Claude Code · Codex로 본인 팀용 커스터마이즈',
+      ]},
+      { type: 'prompt', title: '커스터마이즈 프롬프트', code: `이 Next.js 프로젝트는 Tasklens — 노션 DB를 백엔드로 쓰는 프로젝트·태스크 관리 대시보드야.
+내 팀에 맞게 아래를 수정해줘:
+- 담당자 필드 이름을 '우리 팀 이름'으로 변경
+- '오늘 할 일' 탭에 우선순위 높음 배지 추가
+- 완료 처리 시 슬랙 웹훅으로 알림 보내기 (.env.local 에 SLACK_WEBHOOK_URL 추가)` },
+    ],
+  },
+];
+
+// ================================================================
+// 렌더링
+// ================================================================
+const state = { current: 0 };
+
+function restoreState() {
+  const saved = parseInt(localStorage.getItem('angels-share-step') || '0', 10);
+  if (!Number.isNaN(saved) && saved >= 0 && saved < STEPS.length) {
+    state.current = saved;
+  }
+}
+
+function persistState() {
+  localStorage.setItem('angels-share-step', String(state.current));
+}
+
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderBlock(b, idx) {
+  if (b.type === 'heading') {
+    return `<h3 class="text-[1.15rem] font-semibold mt-10 mb-4">${b.text}</h3>`;
+  }
+  if (b.type === 'text') {
+    return `<p class="leading-8 mb-4" style="color: var(--text);">${b.body}</p>`;
+  }
+  if (b.type === 'note') {
+    return `<div class="card-soft p-4 mb-5 leading-7 text-[0.92rem]" style="color: var(--text);">💡 ${b.body}</div>`;
+  }
+  if (b.type === 'checklist') {
+    return `<ul class="flex flex-col gap-2 mb-5">${b.items.map(item =>
+      `<li class="checklist-item"><span style="color: var(--accent);">□</span><span>${item}</span></li>`
+    ).join('')}</ul>`;
+  }
+  if (b.type === 'links') {
+    return `<div class="flex flex-col gap-2 mb-5">${b.items.map(link => {
+      const isTodo = link.href.startsWith('#todo');
+      const isChromeInternal = link.href.startsWith('chrome://');
+      const isCopyOnly = isTodo || isChromeInternal;
+      const safeHref = isCopyOnly ? 'javascript:void(0)' : escapeHtml(link.href);
+      const target = isCopyOnly ? '' : 'target="_blank" rel="noopener noreferrer"';
+      const badgeStyle = isTodo
+        ? 'background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);'
+        : 'background: rgba(167,139,250,0.15); color: var(--accent); border: 1px solid rgba(167,139,250,0.3);';
+      const badge = isTodo ? 'URL 대기' : link.badge;
+      const copyAttr = isChromeInternal ? ` data-copy-link="${escapeHtml(link.href)}"` : '';
+      return `<a href="${safeHref}" ${target}${copyAttr} class="link-card">
+        <span class="font-medium">${link.label}</span>
+        <span class="text-xs px-2.5 py-1 rounded-full" style="${badgeStyle}">${badge}</span>
+      </a>`;
+    }).join('')}</div>`;
+  }
+  if (b.type === 'prompt') {
+    const id = `prompt-${state.current}-${idx}`;
+    return `<div class="mb-6">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--accent);">${b.title}</span>
+        <button class="copy-btn" data-copy-target="${id}">복사</button>
+      </div>
+      <pre id="${id}" class="prompt-block p-4">${escapeHtml(b.code)}</pre>
+    </div>`;
+  }
+  return '';
+}
+
+function renderStepPills() {
+  const el = document.getElementById('step-pills');
+  el.innerHTML = STEPS.map((s, i) => {
+    const cls = i === state.current ? 'active' : (i < state.current ? 'done' : '');
+    return `<button class="step-pill ${cls}" data-goto="${i}">${s.emoji} ${s.n}</button>`;
+  }).join('');
+  el.querySelectorAll('[data-goto]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.current = parseInt(btn.dataset.goto, 10);
+      render();
+    });
+  });
+}
+
+function renderStepDots() {
+  const el = document.getElementById('step-dots');
+  el.textContent = `${state.current + 1} / ${STEPS.length}`;
+}
+
+function render() {
+  const step = STEPS[state.current];
+  const content = document.getElementById('step-content');
+  content.innerHTML = `
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-3xl">${step.emoji}</span>
+        <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--accent);">STEP ${step.n} · ${step.time}</span>
+      </div>
+      <h1 class="text-[1.9rem] font-bold tracking-tight leading-tight">${step.title}</h1>
+    </div>
+    ${step.blocks.map((b, i) => renderBlock(b, i)).join('')}
+  `;
+
+  // chrome:// 링크 클릭 시 자동 복사
+  content.querySelectorAll('[data-copy-link]').forEach(el => {
+    el.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const url = el.dataset.copyLink;
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast(`"${url}" 복사됨 — 주소창에 붙여넣기`);
+      } catch (err) {
+        showToast('복사 실패');
+      }
+    });
+  });
+
+  // 복사 버튼 바인딩
+  content.querySelectorAll('[data-copy-target]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const target = document.getElementById(btn.dataset.copyTarget);
+      if (!target) return;
+      try {
+        await navigator.clipboard.writeText(target.textContent);
+        btn.classList.add('copied');
+        btn.textContent = '복사됨 ✓';
+        showToast('프롬프트가 복사됐어요');
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.textContent = '복사';
+        }, 1600);
+      } catch (e) {
+        showToast('복사 실패');
+      }
+    });
+  });
+
+  // progress
+  document.getElementById('progress-fill').style.width = `${((state.current + 1) / STEPS.length) * 100}%`;
+  document.getElementById('nav-step-num').textContent = `STEP ${step.n}`;
+  document.getElementById('nav-step-time').textContent = step.time;
+
+  // prev/next
+  document.getElementById('prev-btn').disabled = state.current === 0;
+  document.getElementById('next-btn').disabled = state.current === STEPS.length - 1;
+
+  renderStepPills();
+  renderStepDots();
+  persistState();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+document.getElementById('prev-btn').addEventListener('click', () => {
+  if (state.current > 0) { state.current--; render(); }
+});
+document.getElementById('next-btn').addEventListener('click', () => {
+  if (state.current < STEPS.length - 1) { state.current++; render(); }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowLeft' && state.current > 0) { state.current--; render(); }
+  if (e.key === 'ArrowRight' && state.current < STEPS.length - 1) { state.current++; render(); }
+});
+
+restoreState();
+render();
+</script>
+
+</body>
+</html>
