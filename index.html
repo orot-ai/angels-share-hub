@@ -234,7 +234,7 @@ const STEPS = [
     time: '10분',
     blocks: [
       { type: 'links', items: [
-        { label: '🥃 엔젤스쉐어 샘플 사이트', href: '#todo-hook-demo', badge: '체험' },
+        { label: '🥃 엔젤스쉐어 샘플 사이트', href: 'https://orot-ai.github.io/notion-preview-ed787ded/', badge: '체험' },
       ]},
     ],
   },
@@ -282,9 +282,8 @@ const STEPS = [
     time: '5분',
     blocks: [
       { type: 'links', items: [
-        { label: '📊 상품소개.csv', href: '#todo-csv-products', badge: 'CSV' },
-        { label: '⭐ 고객후기.csv', href: '#todo-csv-reviews', badge: 'CSV' },
-        { label: '📝 엔젤스쉐어 기획서 (노션 복제)', href: '#todo-planner-template', badge: '복제' },
+        { label: '📦 엔젤스쉐어 CSV (상품 + 후기)', href: '/assets/angels-share-csv.zip', badge: 'ZIP' },
+        { label: '📝 엔젤스쉐어 기획서 (노션 복제)', href: 'https://orot-ai.notion.site/PRD-Angel-s-Share-2845b956f49240e78e16754a8dbc0ac8', badge: '복제' },
       ]},
       { type: 'note', body: '<code>@[미시소] 코드 생성 규칙</code>은 Code Previewer 연결 시 자동 복제되는 템플릿에 포함됨.' },
     ],
@@ -321,14 +320,6 @@ DB 연동은 아래 DB를 사용해:
 - 상품: @SERVICE SHOWCASE
 - 후기: @CUSTOMER REVIEW (열람 + 작성 폼)` },
     ],
-  },
-
-  {
-    n: '☕',
-    emoji: '☕',
-    title: '쉬는 시간',
-    time: '5분',
-    blocks: [],
   },
 
   {
@@ -390,8 +381,7 @@ DB 연동이 필요한 섹션은 기획서에 정의한 스키마대로 구성�
     blocks: [
       { type: 'text', body: '로그인 · 권한 분기 · 슬랙 웹훅 같은 서버 필요 기능은 프리뷰로 불가. 완성본 복제해서 직접 돌리는 경로만.' },
       { type: 'links', items: [
-        { label: '📘 Tasklens 완성본 노션 페이지', href: '#todo-tasklens-page', badge: '복제' },
-        { label: '📄 Tasklens PRD', href: '#todo-tasklens-prd', badge: '스펙' },
+        { label: '📘 Tasklens 완성본 노션 페이지', href: 'https://orot-ai.notion.site/Tasklens-e63c675dc55a490fafbcd88859e157cc', badge: '복제' },
       ]},
       { type: 'heading', text: '심화 3단계' },
       { type: 'checklist', items: [
